@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<head>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.1.0/jquery.countdown.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
+	<script type="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/flipclock/0.7.8/flipclock.css" rel="stylesheet">
+</head>
+
+<span class="clock"></span>
+
+<script type="text/javascript">
+	$(function(){
+
+	    countDown = function(){
+	        var currentDate = Math.round(new Date() / 1000);
+
+	        var clock = $('.clock').FlipClock({
+	            countdown: true,
+	            callbacks: {
+	                init: function() {
+	                    //store end date If it's not yet in cookies
+	                    if(!$.cookie('endDate')){
+	                        // end date = current date + 1 minutes
+	                        var endDate = Date.now() + 1440*60*1000; 
+
+	                        // store end date in cookies
+	                        $.cookie('endDate', Math.round(endDate / 1000)); 
+	                    }
+	                },
+	                stop: function() {
+	                    $('.message').html('The clock has stopped!');
+	                },
+	            }
+	        });
+
+	        /* counter can continue the countdown normally in case of refresh. */
+	        var counter = $.cookie('endDate')-currentDate;
+
+	        clock.setTime(counter);
+	        clock.setCountdown(true);
+
+	        clock.start();
+	    }
+
+	    //Lanching count down on ready
+	    countDown();
+	});
+</script>
+</html>
